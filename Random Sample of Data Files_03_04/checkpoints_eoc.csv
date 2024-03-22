@@ -3,6 +3,7 @@ student_id,class_id,chapter_number,book,EOC,n_possible,n_correct,n_attempt
 001824fb-a2fd-431d-aef6-7a1250d97a62,074123e7-cd90-4500-86fe-286aaa733bf5,2,College / Statistics and Data Science (ABC),0.8390804597701149,87,73,127
 001824fb-a2fd-431d-aef6-7a1250d97a62,074123e7-cd90-4500-86fe-286aaa733bf5,3,College / Statistics and Data Science (ABC),0.7692307692307693,104,80,145
 001824fb-a2fd-431d-aef6-7a1250d97a62,074123e7-cd90-4500-86fe-286aaa733bf5,4,College / Statistics and Data Science (ABC),0.7435897435897436,118,87,217
+001824fb-a2fd-431d-aef6-7a1250d97a62,074123e7-cd90-4500-86fe-286aaa733bf5,5,College / Statistics and Data Science (ABC),0.7777777777777778,63,49,90
 001824fb-a2fd-431d-aef6-7a1250d97a62,074123e7-cd90-4500-86fe-286aaa733bf5,6,College / Statistics and Data Science (ABC),0.6979166666666666,96,67,120
 001824fb-a2fd-431d-aef6-7a1250d97a62,074123e7-cd90-4500-86fe-286aaa733bf5,7,College / Statistics and Data Science (ABC),0.7142857142857143,63,45,68
 001824fb-a2fd-431d-aef6-7a1250d97a62,074123e7-cd90-4500-86fe-286aaa733bf5,8,College / Statistics and Data Science (ABC),0.7162162162162162,74,53,88
