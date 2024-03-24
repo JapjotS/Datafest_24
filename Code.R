@@ -4,7 +4,7 @@ library(tidyverse)
 library(ggplot2)
 
 checkpoint_eoc <- read_csv('./Random Sample of Data Files_03_04/checkpoints_eoc.csv')
-checkpoints_pulse <-read_csv('./Random Sample of Data Files_03_04/checkpoints_pulse.csv')
+checkpoints_pulse <- read_csv('./Random Sample of Data Files_03_04/checkpoints_pulse.csv')
 
 
 checkpoints <- inner_join(drop_na(checkpoint_eoc), drop_na(checkpoints_pulse), by = c('student_id', 'class_id', 'book', 'chapter_number'))

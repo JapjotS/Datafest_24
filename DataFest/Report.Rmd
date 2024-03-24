@@ -1,0 +1,111 @@
+---
+title: "Report"
+author: "JENGA"
+date: "2024-03-23"
+output:
+  html_document: default
+  pdf_document: default
+---
+```{r setup, include = FALSE}
+# Modify this setup code chunk to set options
+# or add extra packages etc if needed.
+# See the project instructions for more details
+# on what code to show, and where/how.
+# Set default code chunk options
+knitr::opts_chunk$set(
+  echo = TRUE,
+  eval = TRUE
+)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(styler))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(tidyr))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(rgl))
+theme_set(theme_bw())
+# To give the same random number sequence every time the document is knit:ed,
+# making it easier to discuss the specific numbers in the text:
+set.seed(12345L)
+```
+```{r code=readLines("code.R"), eval=TRUE, echo=FALSE, results = 'hide'}
+# Do not change this code chunk
+# Load function definitions
+source("Code.R")
+```
+**"Success is not the key to confidence. Confidence is the key to success." - Anonymous**
+
+```{r, echo = FALSE}
+df <- clean_data()
+```
+
+In this analysis, our main question of focus what effect does
+
+#. How confident a student felt on the previous chapter
+#. How interesting they think the class is 
+
+have on their results in the following chapter. In particular, what effect does it have on their EOC score. We will begin by doing some basic plots.
+
+```{r, echo = FALSE}
+ggplot(df, aes(x = as.character(Expectancy), y = EOC)) +
+  geom_point(position = position_jitter(width = .1)) + 
+  stat_summary(fun = "mean", geom = "line", aes(group=as.character(Intrinsic_Value), color = as.character(Intrinsic_Value)),) +
+  theme(legend.position = "top", legend.direction = "horizontal") + 
+  theme_light() +
+  xlab('Expectancy') +
+  labs(col="Intrinsic Value", size = 15)
+```
+
+As we can see, these lines are not close to parallel, which suggests some 
+interaction between `Expectancy` and `Intrinsic Value`. This suggests that we should fit the model with interaction variables included.
+
+```{r, echo = FALSE}
+df %>% ggplot() +
+  geom_boxplot(aes(as.character(Expectancy), EOC)) +
+  xlab("Expectancy")
+```
+
+```{r, echo = FALSE}
+df %>% ggplot() +
+  geom_boxplot(aes(as.character(Intrinsic_Value), EOC)) +
+  xlab("Intrinsic Value")
+```
+
+As we can see from the above two box plot, `Expectancy` and `Intrinsic Value` has a slight linear relationship with `EOC` but it is not clear. We will test this relationship by fitting the model.
+
+
+```{r, echo = TRUE}
+mod_full <- lm(EOC ~ (Expectancy + Intrinsic_Value)^2, data = df)
+summary(mod_full)
+```
+
+Let us now check the modeling assumptions with the standard plots
+```{r, echo = FALSE}
+par(mfrow = c(2, 2))
+plot(mod_full)
+```
+
+#### Residuals vs Fitted
+The linear model appears to be a good fit as the residuals are randomly scattered around zero with no discernible clustering or pattern with respect to the fitted values.
+
+#### Normal Q-Q
+We see that the vast majority of points in the QQ-plot lie very close to the reference line, suggesting that the normally distributed assumption is reasonable. There are some points that deviate slightly from the reference line in the upper and lower tail, but this should be expected.
+
+#### Scale-Location
+This is used to assess the homoscedastic (constant variance) assumption. As we can see the points appear to be randomly scattered around a constant value across the range of fitted values.
+
+Overall, the fitted regression model appears to be good with the modelling assumptions seeming to be satisfied (or rather that there is insufficient evidence to reject the assumptions underpinning the normal linear regression model in the language of hypothesis testing). We will thus proceed to calculating confidence intervals for our model parameters and finally, interpreting the results
+
+```{r, echo = TRUE}
+knitr::kable(confint(mod_full))
+```
+
+We can see that the coefficient corresponding to `Expectancy` is positive and in addition the confidence interval is strictly positive. We can interpret this as the more confidence the students felt in the previous chapter, the higher grade they received in the current chapter. We can also see that the coefficient corresponding to the interaction of `Expectancy` and `Intrinsic Value` is strictly negative. This suggest that when students have both high expectancy and high intrinsic value for a subject, the effect on their current chapter grade is dampened compared to when either expectancy or intrinsic value alone is high.
+
+We also notice that the coefficient corresponding to `Intrinsic_Value` alone is not significant as the confidence interval spans $0$.
+
+
+# Code appendix
+
+```{r code=readLines("code.R"), eval=FALSE, echo=TRUE}
+# Do not change this code chunk
+```
